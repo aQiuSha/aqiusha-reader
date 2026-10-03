@@ -129,8 +129,14 @@ final class ReaderViewModel: ObservableObject {
 
     /// 自动检测是否为条漫
     private func detectLongStrip() {
+        // PDF格式不需要检测条漫，直接跳过，避免内存暴涨闪退
+        guard comic.format != .pdf else {
+            isLongStripComic = false
+            return
+        }
+
         // 采样前几页检测
-        let sampleCount = min(5, pages.count)
+        let sampleCount = min(3, pages.count)
         var longCount = 0
         for i in 0..<sampleCount {
             if let image = rawImageForPage(at: i) {
