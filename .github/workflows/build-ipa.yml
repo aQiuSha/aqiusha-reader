@@ -13,14 +13,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: List schemes and save output
+      - name: Create new Xcode project
         run: |
-          xcodebuild -list -project *.xcodeproj > schemes.txt 2>&1
-          cat schemes.txt
+          # 创建新的iOS app工程
+          mkdir -p build
+          cd build
+          xcrun xcodebuild \
+            -project ..\阿邱鲨.xcodeproj \
+            -list 2>&1 | head -20
 
-      - name: Upload schemes output
-        uses: actions/upload-artifact@v4
-        with:
-          name: schemes-output
-          path: schemes.txt
-          retention-days: 1
+      - name: Try building with target
+        run: |
+          xcodebuild \
+            -project *.xcodeproj \
+            -target 阿邱鲨 \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            build 2>&1 | tail -30
