@@ -27,6 +27,7 @@ final class ReaderViewModel: ObservableObject {
     @Published var readingMode: ReadingMode
     @Published var isCurrentPageBookmarked = false
     @Published var autoFlipEnabled = false
+    @Published var autoFlipInterval: Double = 5.0
     @Published var pageTurnEffect: ProgressService.PageTurnEffect
     @Published var readingWidth: Double
     @Published var doublePageMode: Bool
@@ -70,6 +71,7 @@ final class ReaderViewModel: ObservableObject {
         self.avoidNotch = settings.avoidNotch
         self.showThumbnailStrip = settings.showThumbnailStrip
         self.autoFlipEnabled = settings.autoFlipEnabled
+        self.autoFlipInterval = settings.autoFlipInterval
         self.cropWhiteBorder = settings.cropWhiteBorder
         self.enhanceLevel = settings.enhanceLevel
         self.readingBackground = settings.readingBackground
@@ -434,7 +436,7 @@ final class ReaderViewModel: ObservableObject {
             coverSinglePage: coverSinglePage,
             avoidNotch: avoidNotch,
             autoFlipEnabled: autoFlipEnabled,
-            autoFlipInterval: current.autoFlipInterval,
+            autoFlipInterval: autoFlipInterval,
             showThumbnailStrip: showThumbnailStrip,
             cropWhiteBorder: cropWhiteBorder,
             enhanceLevel: enhanceLevel,
