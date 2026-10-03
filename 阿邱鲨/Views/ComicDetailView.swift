@@ -21,6 +21,7 @@ struct ComicDetailView: View {
     @State private var editCollection = ""
     @State private var showCategorySheet = false
     @State private var newCategoryName = ""
+    @State private var showImagePicker = false
 
     private var progress: ReadingProgress? {
         viewModel.progress(for: comic)
@@ -549,6 +550,11 @@ struct ComicDetailView: View {
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
         return formatter.string(from: date)
+    }
+
+    private func saveCustomCover(image: UIImage) {
+        viewModel.setCustomCover(for: comic, image: image)
+        showImagePicker = false
     }
 }
 
