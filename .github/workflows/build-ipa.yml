@@ -16,18 +16,18 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
 
-      - name: Install CocoaPods (if needed)
+      - name: List files
         run: |
-          if [ -f "Podfile" ]; then
-            pod install
-          else
-            echo "No Podfile found, skipping CocoaPods"
-          fi
+          ls -la
+          echo "---"
+          ls -la *.xcodeproj/
+          echo "---"
+          ls -la 阿邱鲨/
 
       - name: Build for testing (unsigned)
         run: |
           xcodebuild \
-            -project 阿邱鲨.xcodeproj \
+            -project *.xcodeproj \
             -scheme 阿邱鲨 \
             -configuration Release \
             -sdk iphoneos \
@@ -36,19 +36,19 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_GENERATE_PROVISIONING_PROFILE=NO \
-            build
+            build 2>&1 | tail -100
 
       - name: Create IPA
         run: |
           mkdir -p build/Payload
-          cp -r build/Build/Products/Release-iphoneos/阿邱鲨.app build/Payload/
+          cp -r build/Build/Products/Release-iphoneos/*.app build/Payload/
           cd build
-          zip -r 阿邱鲨-unsigned.ipa Payload
-          mv 阿邱鲨-unsigned.ipa ..
+          zip -r app.ipa Payload
+          mv app.ipa ..
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
         with:
-          name: 阿邱鲨-ipa
-          path: 阿邱鲨-unsigned.ipa
+          name: aqiusha-ipa
+          path: app.ipa
           retention-days: 30
