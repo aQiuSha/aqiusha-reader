@@ -13,40 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Show Xcode version
-        run: xcodebuild -version
-
-      - name: List schemes
+      - name: List schemes and save output
         run: |
-          xcodebuild -list -project *.xcodeproj
+          xcodebuild -list -project *.xcodeproj > schemes.txt 2>&1
+          cat schemes.txt
 
-      - name: Build for testing (unsigned)
-        run: |
-          xcodebuild \
-            -project *.xcodeproj \
-            -scheme 阿邱鲨 \
-            -configuration Release \
-            -sdk iphoneos \
-            -derivedDataPath build \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_GENERATE_PROVISIONING_PROFILE=NO \
-            build 2>&1 | tail -50
-
-      - name: Find and create IPA
-        run: |
-          APP_PATH=$(find build/Build/Products/Release-iphoneos -name "*.app" -type d | head -1)
-          echo "Found app: $APP_PATH"
-          mkdir -p build/Payload
-          cp -r "$APP_PATH" build/Payload/
-          cd build
-          zip -r app.ipa Payload
-          mv app.ipa ..
-
-      - name: Upload IPA artifact
+      - name: Upload schemes output
         uses: actions/upload-artifact@v4
         with:
-          name: aqiusha-ipa
-          path: app.ipa
-          retention-days: 30
+          name: schemes-output
+          path: schemes.txt
+          retention-days: 1
