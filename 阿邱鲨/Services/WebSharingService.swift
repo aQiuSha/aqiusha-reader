@@ -1,7 +1,6 @@
 //
 //  WebSharingService.swift
 //  阿邱鲨
-//
 //  局域网共享服务：通过浏览器上传漫画文件到手机
 //
 
@@ -15,7 +14,7 @@ final class WebSharingService {
     static let shared = WebSharingService()
 
     private var listener: NWListener?
-    private var connections: [NWConnection] = []
+    private var connections: [String: NWConnection] = [:]
     private(set) var isRunning = false
     private(set) var port: UInt16 = 8080
 
@@ -69,7 +68,7 @@ final class WebSharingService {
     func stop() {
         listener?.cancel()
         listener = nil
-        connections.forEach { $0.cancel() }
+        connections.values.forEach { $0.cancel() }
         connections.removeAll()
         isRunning = false
     }
@@ -101,7 +100,10 @@ final class WebSharingService {
                         0,
                         NI_NUMERICHOST
                     )
-                    address = String(cString: hostname)
+                    let ip = String(cString: hostname)
+                    if !ip.hasPrefix("127.") {
+                        address = ip
+                    }
                 }
             }
         }
@@ -113,64 +115,104 @@ final class WebSharingService {
     // MARK: - 处理连接
 
     private func handleConnection(_ connection: NWConnection) {
-        connections.append(connection)
+        let id = UUID().uuidString
+        connections[id] = connection
         connection.start(queue: .main)
-
-        receiveRequest(connection)
+        
+        var buffer = Data()
+        receiveNext(connection: connection, id: id, buffer: &buffer)
     }
 
-    private func receiveRequest(_ connection: NWConnection) {
+    private func receiveNext(connection: NWConnection, id: String, buffer: inout Data) {
         connection.receive(minimumIncompleteLength: 1, maximumLength: 65536) { [weak self] data, _, isComplete, error in
             guard let self = self else { return }
 
             if let error = error {
-                self.closeConnection(connection)
+                self.closeConnection(connection, id: id)
                 return
             }
 
             if let data = data, !data.isEmpty {
-                self.handleRequest(data: data, connection: connection)
-            } else if isComplete {
-                self.closeConnection(connection)
+                buffer.append(data)
+            }
+
+            // 尝试解析完整请求
+            if self.processRequestIfComplete(connection: connection, id: id, buffer: &buffer) {
+                return
+            }
+
+            if isComplete {
+                self.closeConnection(connection, id: id)
             } else {
-                self.receiveRequest(connection)
+                self.receiveNext(connection: connection, id: id, buffer: &buffer)
             }
         }
     }
 
-    private func handleRequest(data: Data, connection: NWConnection) {
-        guard let requestString = String(data: data, encoding: .utf8) else {
-            sendResponse(connection, statusCode: 400, body: "Bad Request")
-            return
+    // MARK: - 请求解析
+
+    private func processRequestIfComplete(connection: NWConnection, id: String, buffer: inout Data) -> Bool {
+        // 找 header 结束位置
+        guard let separator = "\r\n\r\n".data(using: .utf8),
+              let separatorRange = buffer.range(of: separator) else {
+            return false
         }
 
-        let lines = requestString.components(separatedBy: "\r\n")
-        guard let firstLine = lines.first else {
-            sendResponse(connection, statusCode: 400, body: "Bad Request")
-            return
+        let headerData = buffer.subdata(in: 0..<separatorRange.lowerBound)
+        guard let headerString = String(data: headerData, encoding: .utf8) else {
+            return false
         }
+
+        let lines = headerString.components(separatedBy: "\r\n")
+        guard let firstLine = lines.first else { return false }
 
         let parts = firstLine.components(separatedBy: " ")
-        guard parts.count >= 2 else {
-            sendResponse(connection, statusCode: 400, body: "Bad Request")
-            return
-        }
+        guard parts.count >= 2 else { return false }
 
         let method = parts[0]
         let path = parts[1]
 
+        // 找 Content-Length
+        var contentLength = 0
+        for line in lines {
+            if line.lowercased().hasPrefix("content-length:") {
+                let value = line.dropFirst("content-length:".count).trimmingCharacters(in: .whitespaces)
+                contentLength = Int(value) ?? 0
+                break
+            }
+        }
+
+        // 检查 body 是否收完整
+        let bodyStart = separatorRange.upperBound
+        let expectedTotal = bodyStart + contentLength
+        if buffer.count < expectedTotal {
+            return false // 还没收完，继续等
+        }
+
+        // 请求完整了，开始处理
+        let bodyData = buffer.subdata(in: bodyStart..<(bodyStart + contentLength))
+        let fullRequestData = buffer.subdata(in: 0..<(bodyStart + contentLength))
+
+        // 清空 buffer（简化处理，不支持pipeline）
+        buffer.removeAll()
+
+        handleRequest(method: method, path: path, fullData: fullRequestData, bodyData: bodyData, headerString: headerString, connection: connection, id: id)
+        return true
+    }
+
+    private func handleRequest(method: String, path: String, fullData: Data, bodyData: Data, headerString: String, connection: NWConnection, id: String) {
         if method == "GET" && path == "/" {
-            sendUploadPage(connection)
+            sendUploadPage(connection: connection, id: id)
         } else if method == "POST" && path == "/upload" {
-            handleUpload(data: data, connection: connection)
+            handleUpload(bodyData: bodyData, headerString: headerString, connection: connection, id: id)
         } else {
-            sendResponse(connection, statusCode: 404, body: "Not Found")
+            sendResponse(connection: connection, id: id, statusCode: 404, body: "Not Found")
         }
     }
 
     // MARK: - 上传页面
 
-    private func sendUploadPage(_ connection: NWConnection) {
+    private func sendUploadPage(connection: NWConnection, id: String) {
         let html = """
         <!DOCTYPE html>
         <html>
@@ -219,8 +261,8 @@ final class WebSharingService {
                     margin-bottom: 20px;
                 }
                 .upload-area:hover, .upload-area.dragover {
-                    border-color: #007aff;
-                    background: #f0f7ff;
+                    border-color: #ff6b9d;
+                    background: #fff0f5;
                 }
                 .upload-icon {
                     font-size: 48px;
@@ -239,7 +281,7 @@ final class WebSharingService {
                 .btn {
                     width: 100%;
                     padding: 14px;
-                    background: #007aff;
+                    background: #ff6b9d;
                     color: white;
                     border: none;
                     border-radius: 10px;
@@ -298,7 +340,7 @@ final class WebSharingService {
                 }
                 .progress-fill {
                     height: 100%;
-                    background: #007aff;
+                    background: #ff6b9d;
                     width: 0%;
                     transition: width 0.3s;
                 }
@@ -356,7 +398,6 @@ final class WebSharingService {
                         <span class="format-tag">PDF</span>
                         <span class="format-tag">EPUB</span>
                         <span class="format-tag">图片</span>
-                        <span class="format-tag">文件夹</span>
                     </div>
                 </div>
             </div>
@@ -461,37 +502,62 @@ final class WebSharingService {
         </html>
         """
 
-        sendResponse(connection, statusCode: 200, contentType: "text/html; charset=utf-8", body: html)
+        sendResponse(connection: connection, id: id, statusCode: 200, contentType: "text/html; charset=utf-8", body: html)
     }
 
     // MARK: - 处理上传
 
-    private func handleUpload(data: Data, connection: NWConnection) {
-        // 解析 multipart/form-data
-        guard let contentType = extractHeader(data: data, header: "Content-Type") else {
-            sendResponse(connection, statusCode: 400, body: "Missing Content-Type")
+    private func handleUpload(bodyData: Data, headerString: String, connection: NWConnection, id: String) {
+        // 从 header 里找 boundary
+        guard let contentTypeLine = headerString.components(separatedBy: "\r\n").first(where: { $0.lowercased().hasPrefix("content-type:") }),
+              let boundaryRange = contentTypeLine.range(of: "boundary=") else {
+            sendResponse(connection: connection, id: id, statusCode: 400, body: "Missing boundary")
             return
         }
 
-        guard let boundary = extractBoundary(contentType: contentType) else {
-            sendResponse(connection, statusCode: 400, body: "Invalid boundary")
+        let boundary = String(contentTypeLine[boundaryRange.upperBound...]).trimmingCharacters(in: .whitespaces)
+        let boundaryData = ("--" + boundary).data(using: .utf8)!
+
+        // 找第一个 boundary
+        guard let firstBoundaryRange = bodyData.range(of: boundaryData) else {
+            sendResponse(connection: connection, id: id, statusCode: 400, body: "No boundary found")
             return
         }
 
-        // 分离 header 和 body
+        let afterFirst = bodyData.subdata(in: firstBoundaryRange.upperBound..<bodyData.count)
+
+        // 找 \r\n\r\n 分隔符
         guard let separator = "\r\n\r\n".data(using: .utf8),
-              let separatorRange = data.range(of: separator) else {
-            sendResponse(connection, statusCode: 400, body: "Invalid request")
+              let separatorRange = afterFirst.range(of: separator) else {
+            sendResponse(connection: connection, id: id, statusCode: 400, body: "Invalid multipart")
             return
         }
 
-        let bodyData = data.subdata(in: separatorRange.upperBound..<data.count)
-
-        // 解析文件
-        guard let fileData = extractFileData(from: bodyData, boundary: boundary),
-              let fileName = extractFileName(from: bodyData, boundary: boundary) else {
-            sendResponse(connection, statusCode: 400, body: "No file found")
+        // 提取文件名
+        let headerPart = afterFirst.subdata(in: 0..<separatorRange.lowerBound)
+        guard let headerString = String(data: headerPart, encoding: .utf8),
+              let nameRange = headerString.range(of: "filename=\"") else {
+            sendResponse(connection: connection, id: id, statusCode: 400, body: "No filename")
             return
+        }
+        let afterName = headerString[nameRange.upperBound...]
+        guard let endRange = afterName.range(of: "\"") else {
+            sendResponse(connection: connection, id: id, statusCode: 400, body: "Invalid filename")
+            return
+        }
+        let fileName = String(afterName[..<endRange.lowerBound])
+
+        // 提取文件内容
+        let contentStart = separatorRange.upperBound
+        var contentData = afterFirst.subdata(in: contentStart..<afterFirst.count)
+
+        // 找结束 boundary
+        if let endBoundaryRange = contentData.range(of: boundaryData) {
+            contentData = contentData.subdata(in: 0..<endBoundaryRange.lowerBound)
+            // 去掉结尾的 \r\n
+            if contentData.count >= 2 {
+                contentData = contentData.subdata(in: 0..<(contentData.count - 2))
+            }
         }
 
         // 保存到临时目录
@@ -499,80 +565,28 @@ final class WebSharingService {
         let tempURL = tempDir.appendingPathComponent(fileName)
 
         do {
-            try fileData.write(to: tempURL)
-            statusUpdate?("收到文件：\(fileName)")
+            try contentData.write(to: tempURL)
+            statusUpdate?("收到文件：\(fileName) (\(contentData.count / 1024 / 1024) MB)")
             onFileReceived?(tempURL)
-            sendResponse(connection, statusCode: 200, body: "OK")
+            sendResponse(connection: connection, id: id, statusCode: 200, body: "OK")
         } catch {
-            sendResponse(connection, statusCode: 500, body: "Save failed")
+            sendResponse(connection: connection, id: id, statusCode: 500, body: "Save failed: \(error.localizedDescription)")
         }
-    }
-
-    private func extractHeader(data: Data, header: String) -> String? {
-        guard let string = String(data: data, encoding: .utf8) else { return nil }
-        let lines = string.components(separatedBy: "\r\n")
-        for line in lines {
-            if line.lowercased().hasPrefix(header.lowercased() + ":") {
-                return String(line.dropFirst(header.count + 1)).trimmingCharacters(in: .whitespaces)
-            }
-        }
-        return nil
-    }
-
-    private func extractBoundary(contentType: String) -> String? {
-        guard let range = contentType.range(of: "boundary=") else { return nil }
-        return String(contentType[range.upperBound...]).trimmingCharacters(in: .whitespaces)
-    }
-
-    private func extractFileName(from data: Data, boundary: String) -> String? {
-        guard let string = String(data: data, encoding: .utf8) else { return nil }
-        guard let nameRange = string.range(of: "filename=\"") else { return nil }
-        let afterName = string[nameRange.upperBound...]
-        guard let endRange = afterName.range(of: "\"") else { return nil }
-        return String(afterName[..<endRange.lowerBound])
-    }
-
-    private func extractFileData(from data: Data, boundary: String) -> Data? {
-        guard let boundaryData = ("--" + boundary).data(using: .utf8) else { return nil }
-
-        // 找到第一个 boundary 后的内容
-        guard let firstBoundary = data.range(of: boundaryData) else { return nil }
-        let afterFirst = data.subdata(in: firstBoundary.upperBound..<data.count)
-
-        // 找到 \r\n\r\n 分隔符（header 结束）
-        guard let separator = "\r\n\r\n".data(using: .utf8),
-              let separatorRange = afterFirst.range(of: separator) else { return nil }
-
-        let contentStart = separatorRange.upperBound
-        let contentData = afterFirst.subdata(in: contentStart..<afterFirst.count)
-
-        // 找到结束 boundary
-        guard let endBoundary = contentData.range(of: boundaryData) else {
-            // 没有结束 boundary，可能数据不完整，返回剩余内容
-            return contentData
-        }
-
-        // 去掉结尾的 \r\n
-        var fileData = contentData.subdata(in: 0..<endBoundary.lowerBound)
-        if fileData.count >= 2 {
-            fileData = fileData.subdata(in: 0..<(fileData.count - 2))
-        }
-
-        return fileData
     }
 
     // MARK: - 发送响应
 
-    private func sendResponse(_ connection: NWConnection, statusCode: Int, contentType: String = "text/plain", body: String) {
+    private func sendResponse(connection: NWConnection, id: String, statusCode: Int, contentType: String = "text/plain", body: String) {
         let bodyData = body.data(using: .utf8) ?? Data()
-        sendResponse(connection, statusCode: statusCode, contentType: contentType, bodyData: bodyData)
+        sendResponse(connection: connection, id: id, statusCode: statusCode, contentType: contentType, bodyData: bodyData)
     }
 
-    private func sendResponse(_ connection: NWConnection, statusCode: Int, contentType: String, bodyData: Data) {
+    private func sendResponse(connection: NWConnection, id: String, statusCode: Int, contentType: String, bodyData: Data) {
         let statusText = HTTPURLResponse.localizedString(forStatusCode: statusCode)
         let header = "HTTP/1.1 \(statusCode) \(statusText)\r\n" +
                      "Content-Type: \(contentType)\r\n" +
                      "Content-Length: \(bodyData.count)\r\n" +
+                     "Access-Control-Allow-Origin: *\r\n" +
                      "Connection: close\r\n" +
                      "\r\n"
 
@@ -580,12 +594,12 @@ final class WebSharingService {
         responseData.append(bodyData)
 
         connection.send(content: responseData, completion: .contentProcessed { [weak self] _ in
-            self?.closeConnection(connection)
+            self?.closeConnection(connection, id: id)
         })
     }
 
-    private func closeConnection(_ connection: NWConnection) {
+    private func closeConnection(_ connection: NWConnection, id: String) {
         connection.cancel()
-        connections.removeAll { $0 === connection }
+        connections.removeValue(forKey: id)
     }
 }
