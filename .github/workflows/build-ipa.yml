@@ -19,7 +19,7 @@ jobs:
       - name: Generate Xcode project
         run: xcodegen generate
 
-      - name: Build
+      - name: Build and save log
         run: |
           xcodebuild \
             -project AQiuSha.xcodeproj \
@@ -30,27 +30,11 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            build
+            build > build.log 2>&1 || true
 
-      - name: Check build products
-        run: |
-          echo "=== Build products directory ==="
-          ls -laR build/Build/Products/
-
-      - name: Create IPA
-        run: |
-          APP_PATH=$(find build/Build/Products -name "*.app" -type d | head -1)
-          echo "Found app: $APP_PATH"
-          ls -la "$APP_PATH" || echo "App not found!"
-          mkdir -p build/Payload
-          cp -r "$APP_PATH" build/Payload/
-          cd build
-          zip -r app.ipa Payload
-          mv app.ipa ..
-
-      - name: Upload IPA
+      - name: Upload build log
         uses: actions/upload-artifact@v4
         with:
-          name: aqiusha-ipa
-          path: app.ipa
-          retention-days: 30
+          name: build-log
+          path: build.log
+          retention-days: 1
