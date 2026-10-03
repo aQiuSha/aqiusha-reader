@@ -297,8 +297,7 @@ struct SettingsView: View {
         service.onFileReceived = { url in
             Task { @MainActor in
                 // 导入收到的文件
-                let libraryVM = LibraryViewModel()
-                _ = try? await libraryVM.importComic(from: url)
+                _ = try? await libraryViewModel.importComic(from: url)
             }
         }
         service.start(port: 8080)
