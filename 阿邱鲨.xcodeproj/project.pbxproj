@@ -1,0 +1,436 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A1000001000000000000001 /* 阿邱鲨App.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000001 /* 阿邱鲨App.swift */; };
+		A1000001000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000002 /* ContentView.swift */; };
+		A1000001000000000000003 /* Comic.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000003 /* Comic.swift */; };
+		A1000001000000000000004 /* ReadingProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000004 /* ReadingProgress.swift */; };
+		A1000001000000000000005 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000005 /* LibraryView.swift */; };
+		A1000001000000000000006 /* ReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000006 /* ReaderView.swift */; };
+		A1000001000000000000007 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000007 /* SettingsView.swift */; };
+		A1000001000000000000008 /* LibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000008 /* LibraryViewModel.swift */; };
+		A1000001000000000000009 /* ReaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000009 /* ReaderViewModel.swift */; };
+		A1000001000000000000010 /* ArchiveService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000010 /* ArchiveService.swift */; };
+		A1000001000000000000011 /* ComicImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000011 /* ComicImportService.swift */; };
+		A1000001000000000000012 /* ProgressService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000012 /* ProgressService.swift */; };
+		A1000001000000000000014 /* RARArchiveService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000016 /* RARArchiveService.swift */; };
+		A1000001000000000000015 /* EPUBService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000017 /* EPUBService.swift */; };
+		A1000001000000000000016 /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000018 /* Bookmark.swift */; };
+		A1000001000000000000017 /* ComicDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000019 /* ComicDetailView.swift */; };
+		A1000001000000000000018 /* ImageEnhancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000020 /* ImageEnhancer.swift */; };
+		A1000001000000000000019 /* LockScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000021 /* LockScreenView.swift */; };
+		A1000001000000000000020 /* WebSharingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000022 /* WebSharingService.swift */; };
+		A1000001000000000000013 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000013 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B1000001000000000000001 /* 阿邱鲨App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 阿邱鲨App.swift; sourceTree = "<group>"; };
+		B1000001000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B1000001000000000000003 /* Comic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comic.swift; sourceTree = "<group>"; };
+		B1000001000000000000004 /* ReadingProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingProgress.swift; sourceTree = "<group>"; };
+		B1000001000000000000005 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
+		B1000001000000000000006 /* ReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderView.swift; sourceTree = "<group>"; };
+		B1000001000000000000007 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B1000001000000000000008 /* LibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewModel.swift; sourceTree = "<group>"; };
+		B1000001000000000000009 /* ReaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderViewModel.swift; sourceTree = "<group>"; };
+		B1000001000000000000010 /* ArchiveService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveService.swift; sourceTree = "<group>"; };
+		B1000001000000000000011 /* ComicImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicImportService.swift; sourceTree = "<group>"; };
+		B1000001000000000000012 /* ProgressService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressService.swift; sourceTree = "<group>"; };
+		B1000001000000000000016 /* RARArchiveService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RARArchiveService.swift; sourceTree = "<group>"; };
+		B1000001000000000000017 /* EPUBService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPUBService.swift; sourceTree = "<group>"; };
+		B1000001000000000000018 /* Bookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
+		B1000001000000000000019 /* ComicDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicDetailView.swift; sourceTree = "<group>"; };
+		B1000001000000000000020 /* ImageEnhancer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEnhancer.swift; sourceTree = "<group>"; };
+		B1000001000000000000021 /* LockScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenView.swift; sourceTree = "<group>"; };
+		B1000001000000000000022 /* WebSharingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSharingService.swift; sourceTree = "<group>"; };
+		B1000001000000000000013 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B1000001000000000000014 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B1000001000000000000015 /* 阿邱鲨.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 阿邱鲨.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C1000001000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D1000001000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				D1000001000000000000002 /* 阿邱鲨 */,
+				D1000001000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D1000001000000000000002 /* 阿邱鲨 */ = {
+			isa = PBXGroup;
+			children = (
+				B1000001000000000000001 /* 阿邱鲨App.swift */,
+				B1000001000000000000002 /* ContentView.swift */,
+				D1000001000000000000004 /* Models */,
+				D1000001000000000000005 /* Views */,
+				D1000001000000000000006 /* ViewModels */,
+				D1000001000000000000007 /* Services */,
+				B1000001000000000000013 /* Assets.xcassets */,
+				B1000001000000000000014 /* Info.plist */,
+			);
+			path = 阿邱鲨;
+			sourceTree = "<group>";
+		};
+		D1000001000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B1000001000000000000015 /* 阿邱鲨.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D1000001000000000000004 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B1000001000000000000003 /* Comic.swift */,
+				B1000001000000000000004 /* ReadingProgress.swift */,
+				B1000001000000000000018 /* Bookmark.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D1000001000000000000005 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B1000001000000000000005 /* LibraryView.swift */,
+				B1000001000000000000006 /* ReaderView.swift */,
+				B1000001000000000000007 /* SettingsView.swift */,
+				B1000001000000000000019 /* ComicDetailView.swift */,
+				B1000001000000000000021 /* LockScreenView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D1000001000000000000006 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				B1000001000000000000008 /* LibraryViewModel.swift */,
+				B1000001000000000000009 /* ReaderViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		D1000001000000000000007 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B1000001000000000000010 /* ArchiveService.swift */,
+				B1000001000000000000011 /* ComicImportService.swift */,
+				B1000001000000000000012 /* ProgressService.swift */,
+				B1000001000000000000016 /* RARArchiveService.swift */,
+				B1000001000000000000017 /* EPUBService.swift */,
+				B1000001000000000000020 /* ImageEnhancer.swift */,
+				B1000001000000000000022 /* WebSharingService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E1000001000000000000001 /* 阿邱鲨 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1000001000000000000002 /* Build configuration list for PBXNativeTarget "阿邱鲨" */;
+			buildPhases = (
+				G1000001000000000000001 /* Sources */,
+				C1000001000000000000001 /* Frameworks */,
+				H1000001000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = 阿邱鲨;
+			productName = 阿邱鲨;
+			productReference = B1000001000000000000015 /* 阿邱鲨.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		I1000001000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					E1000001000000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = F1000001000000000000001 /* Build configuration list for PBXProject "阿邱鲨" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+			);
+			mainGroup = D1000001000000000000001;
+			productRefGroup = D1000001000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E1000001000000000000001 /* 阿邱鲨 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		H1000001000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000001000000000000013 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		G1000001000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000001000000000000001 /* 阿邱鲨App.swift in Sources */,
+				A1000001000000000000002 /* ContentView.swift in Sources */,
+				A1000001000000000000003 /* Comic.swift in Sources */,
+				A1000001000000000000004 /* ReadingProgress.swift in Sources */,
+				A1000001000000000000005 /* LibraryView.swift in Sources */,
+				A1000001000000000000006 /* ReaderView.swift in Sources */,
+				A1000001000000000000007 /* SettingsView.swift in Sources */,
+				A1000001000000000000008 /* LibraryViewModel.swift in Sources */,
+				A1000001000000000000009 /* ReaderViewModel.swift in Sources */,
+				A1000001000000000000010 /* ArchiveService.swift in Sources */,
+				A1000001000000000000011 /* ComicImportService.swift in Sources */,
+				A1000001000000000000012 /* ProgressService.swift in Sources */,
+				A1000001000000000000014 /* RARArchiveService.swift in Sources */,
+				A1000001000000000000015 /* EPUBService.swift in Sources */,
+				A1000001000000000000016 /* Bookmark.swift in Sources */,
+				A1000001000000000000017 /* ComicDetailView.swift in Sources */,
+				A1000001000000000000018 /* ImageEnhancer.swift in Sources */,
+				A1000001000000000000019 /* LockScreenView.swift in Sources */,
+				A1000001000000000000020 /* WebSharingService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		J1000001000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		J1000001000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		J1000001000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = 阿邱鲨/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aqiusha.reader;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		J1000001000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = 阿邱鲨/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aqiusha.reader;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F1000001000000000000001 /* Build configuration list for PBXProject "阿邱鲨" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				J1000001000000000000001 /* Debug */,
+				J1000001000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F1000001000000000000002 /* Build configuration list for PBXNativeTarget "阿邱鲨" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				J1000001000000000000003 /* Debug */,
+				J1000001000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = I1000001000000000000001 /* Project object */;
+}
