@@ -1,0 +1,57 @@
+name: Build iOS IPA
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_15.2.app
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Install CocoaPods (if needed)
+        run: |
+          if [ -f "Podfile" ]; then
+            pod install
+          else
+            echo "No Podfile found, skipping CocoaPods"
+          fi
+
+      - name: Build for testing (unsigned)
+        run: |
+          xcodebuild \
+            -project 阿邱鲨.xcodeproj \
+            -scheme 阿邱鲨 \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_GENERATE_PROVISIONING_PROFILE=NO \
+            build
+
+      - name: Create IPA
+        run: |
+          mkdir -p build/Payload
+          cp -r build/Build/Products/Release-iphoneos/阿邱鲨.app build/Payload/
+          cd build
+          zip -r 阿邱鲨-unsigned.ipaf Payload
+          mv 阿邱鲨-unsigned.ipaf ..
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: 阿邱鲨-ipa
+          path: 阿邱鲨-unsigned.ipa
+          retention-days: 30
