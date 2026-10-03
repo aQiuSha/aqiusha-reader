@@ -321,7 +321,7 @@ struct LibraryView: View {
                         FilterChip(
                             title: category,
                             isSelected: selectedCategory == category,
-                            count: viewModel.comics(in: category).count
+                            count: viewModel.comics(inCategory: category).count
                         ) {
                             selectedCategory = selectedCategory == category ? nil : category
                         }
@@ -550,14 +550,16 @@ struct LibraryView: View {
 
     private var collectionView: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 有合集的漫画
-            ForEach(viewModel.allCollections, id: \.self) { collectionName in
+            // 有合集的漫画（先过滤出非空的）
+            ForEach(viewModel.allCollections.filter { collectionName in
+                !viewModel.comics(in: collectionName)
+                    .filter { matchesFilter($0) && matchesSearch($0) }
+                    .isEmpty
+            }, id: \.self) { collectionName in
                 let comicsInCollection = viewModel.comics(in: collectionName)
                     .filter { comic in
-                        // 应用当前筛选和搜索
                         matchesFilter(comic) && matchesSearch(comic)
                     }
-                guard !comicsInCollection.isEmpty else { return }
 
                 collectionSection(
                     name: collectionName,
