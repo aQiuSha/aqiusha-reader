@@ -441,7 +441,8 @@ final class ReaderViewModel: ObservableObject {
             readingBackground: readingBackground,
             immersiveMode: immersiveMode,
             showPageNumber: showPageNumber,
-            preloadCount: current.preloadCount
+            preloadCount: current.preloadCount,
+            uiFontSize: current.uiFontSize
         )
         progressService.saveSettings(settings)
 
