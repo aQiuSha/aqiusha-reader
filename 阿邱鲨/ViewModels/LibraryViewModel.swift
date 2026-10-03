@@ -370,6 +370,16 @@ final class LibraryViewModel: ObservableObject {
         saveComics()
     }
 
+    /// 设置自定义封面（传入UIImage）
+    func setCustomCover(for comic: Comic, image: UIImage) {
+        guard let data = image.jpegData(compressionQuality: 0.8) else { return }
+        let fileName = "custom-cover-\(comic.id.uuidString).jpg"
+        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileURL = documentsPath.appendingPathComponent(fileName)
+        try? data.write(to: fileURL)
+        updateCustomCover(comic: comic, path: fileURL.path)
+    }
+
     // MARK: - 批量操作
 
     /// 批量删除
