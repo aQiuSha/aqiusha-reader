@@ -555,7 +555,7 @@ struct AboutView: View {
 
                 Text("用 SwiftUI 精心打造")
                     .font(.caption2)
-                    .foregroundColor(.tertiary)
+                    .foregroundColor(.secondary)
             }
             .padding(.top, 40)
             .padding(.bottom, 20)
