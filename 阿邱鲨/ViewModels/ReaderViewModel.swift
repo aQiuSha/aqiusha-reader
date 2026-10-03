@@ -106,31 +106,25 @@ final class ReaderViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
 
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
+        // 直接在主线程加载，避免并发崩溃
+        let loadedPages = self.importService.pages(for: self.comic)
+        self.pages = loadedPages
 
-            let loadedPages = self.importService.pages(for: self.comic)
-
-            DispatchQueue.main.async {
-                self.pages = loadedPages
-
-                if let progress = self.progressService.getProgress(for: self.comic.id) {
-                    self.currentPageIndex = min(progress.currentPage, max(loadedPages.count - 1, 0))
-                }
-
-                // 自动检测条漫
-                self.detectLongStrip()
-
-                self.updateBookmarkState()
-                self.isLoading = false
-
-                // 预加载当前页附近的图片
-                self.preloadImages(around: self.currentPageIndex)
-
-                // 记录上次阅读
-                self.progressService.saveLastReadComicID(self.comic.id)
-            }
+        if let progress = self.progressService.getProgress(for: self.comic.id) {
+            self.currentPageIndex = min(progress.currentPage, max(loadedPages.count - 1, 0))
         }
+
+        // 自动检测条漫
+        self.detectLongStrip()
+
+        self.updateBookmarkState()
+        self.isLoading = false
+
+        // 预加载当前页附近的图片
+        self.preloadImages(around: self.currentPageIndex)
+
+        // 记录上次阅读
+        self.progressService.saveLastReadComicID(self.comic.id)
     }
 
     /// 自动检测是否为条漫
