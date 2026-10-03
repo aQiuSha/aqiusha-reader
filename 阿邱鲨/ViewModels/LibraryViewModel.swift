@@ -169,9 +169,10 @@ final class LibraryViewModel: ObservableObject {
     private func isDuplicate(url: URL) -> Bool {
         let fileName = url.lastPathComponent
         let fileSize = (try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0
+        let fileNameWithoutExt = url.deletingPathExtension().lastPathComponent
         return comics.contains { comic in
             comic.sourcePath == fileName ||
-            (comic.fileSize == Int64(fileSize) && comic.title == fileName.deletingPathExtension)
+            (comic.fileSize == Int64(fileSize) && comic.title == fileNameWithoutExt)
         }
     }
 
@@ -431,7 +432,7 @@ final class LibraryViewModel: ObservableObject {
     }
 
     /// 获取指定分类的漫画
-    func comics(in category: String) -> [Comic] {
+    func comics(inCategory category: String) -> [Comic] {
         return comics.filter { $0.categories.contains(category) }
     }
 
