@@ -13,24 +13,41 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create new Xcode project
-        run: |
-          # 创建新的iOS app工程
-          mkdir -p build
-          cd build
-          xcrun xcodebuild \
-            -project ..\阿邱鲨.xcodeproj \
-            -list 2>&1 | head -20
+      - name: Install XcodeGen
+        run: brew install xcodegen
 
-      - name: Try building with target
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: List generated project
+        run: ls -la *.xcodeproj/
+
+      - name: Build
         run: |
           xcodebuild \
-            -project *.xcodeproj \
-            -target 阿邱鲨 \
+            -project AQiuSha.xcodeproj \
+            -scheme AQiuSha \
             -configuration Release \
             -sdk iphoneos \
             -derivedDataPath build \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            build 2>&1 | tail -30
+            build 2>&1 | tail -50
+
+      - name: Create IPA
+        run: |
+          APP_PATH=$(find build/Build/Products/Release-iphoneos -name "*.app" -type d | head -1)
+          echo "Found app: $APP_PATH"
+          mkdir -p build/Payload
+          cp -r "$APP_PATH" build/Payload/
+          cd build
+          zip -r app.ipa Payload
+          mv app.ipa ..
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: aqiusha-ipa
+          path: app.ipa
+          retention-days: 30
