@@ -194,7 +194,7 @@ struct SetPasswordView: View {
                 HStack(spacing: 16) {
                     ForEach(0..<4, id: \.self) { index in
                         Circle()
-                            .fill(index < currentPassword.count ? Color.blue : Color.gray.opacity(0.3))
+                            .fill(index < currentPassword.wrappedValue.count ? Color.blue : Color.gray.opacity(0.3))
                             .frame(width: 14, height: 14)
                     }
                 }
@@ -228,8 +228,8 @@ struct SetPasswordView: View {
                         Color.clear.frame(width: 60, height: 60)
                         numButton("0")
                         Button {
-                            if !currentPassword.isEmpty {
-                                currentPassword.removeLast()
+                            if !currentPassword.wrappedValue.isEmpty {
+                                currentPassword.wrappedValue.removeLast()
                                 errorMessage = ""
                             }
                         } label: {
