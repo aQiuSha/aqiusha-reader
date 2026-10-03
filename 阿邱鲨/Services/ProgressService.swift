@@ -314,7 +314,7 @@ final class ProgressService {
     }
 
     /// 阅读器设置
-    struct ReaderSettings: Codable {
+    struct ReaderSettings: Codable, Equatable {
         var readingDirection: ReadingDirection
         var readingMode: ReadingMode
         var brightness: Double
