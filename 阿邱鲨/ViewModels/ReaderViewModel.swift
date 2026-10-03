@@ -72,8 +72,8 @@ final class ReaderViewModel: ObservableObject {
         self.showThumbnailStrip = settings.showThumbnailStrip
         self.autoFlipEnabled = settings.autoFlipEnabled
         self.autoFlipInterval = settings.autoFlipInterval
-        self.cropWhiteBorder = settings.cropWhiteBorder
-        self.enhanceLevel = settings.enhanceLevel
+        self.cropWhiteBorder = false
+        self.enhanceLevel = 0
         self.readingBackground = settings.readingBackground
         self.immersiveMode = settings.immersiveMode
         self.showPageNumber = settings.showPageNumber
@@ -228,7 +228,7 @@ final class ReaderViewModel: ObservableObject {
         preloadTask?.cancel()
 
         let settings = progressService.getSettings()
-        let preloadCount = max(1, settings.preloadCount)
+        let preloadCount = 0
 
         preloadTask = Task {
             // 预加载前后各 preloadCount 页
