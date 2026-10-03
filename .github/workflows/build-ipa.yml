@@ -16,14 +16,6 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
 
-      - name: List files
-        run: |
-          ls -la
-          echo "---"
-          ls -la *.xcodeproj/
-          echo "---"
-          ls -la 阿邱鲨/
-
       - name: Build for testing (unsigned)
         run: |
           xcodebuild \
@@ -36,12 +28,16 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_GENERATE_PROVISIONING_PROFILE=NO \
-            build 2>&1 | tail -100
+            build
 
-      - name: Create IPA
+      - name: Find and create IPA
         run: |
+          echo "Build products:"
+          ls -la build/Build/Products/Release-iphoneos/
+          APP_PATH=$(find build/Build/Products/Release-iphoneos -name "*.app" -type d | head -1)
+          echo "Found app: $APP_PATH"
           mkdir -p build/Payload
-          cp -r build/Build/Products/Release-iphoneos/*.app build/Payload/
+          cp -r "$APP_PATH" build/Payload/
           cd build
           zip -r app.ipa Payload
           mv app.ipa ..
