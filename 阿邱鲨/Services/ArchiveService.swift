@@ -278,15 +278,17 @@ enum ArchiveError: LocalizedError {
 private extension Data {
     func readUInt16(at offset: Int) -> UInt16? {
         guard offset + 2 <= count else { return nil }
-        return UInt16(littleEndian: self.withUnsafeBytes {
-            $0.load(fromByteOffset: offset, as: UInt16.self)
-        })
+        let b0 = self[startIndex + offset]
+        let b1 = self[startIndex + offset + 1]
+        return UInt16(b0) | (UInt16(b1) << 8)
     }
 
     func readUInt32(at offset: Int) -> UInt32? {
         guard offset + 4 <= count else { return nil }
-        return UInt32(littleEndian: self.withUnsafeBytes {
-            $0.load(fromByteOffset: offset, as: UInt32.self)
-        })
+        let b0 = self[startIndex + offset]
+        let b1 = self[startIndex + offset + 1]
+        let b2 = self[startIndex + offset + 2]
+        let b3 = self[startIndex + offset + 3]
+        return UInt32(b0) | (UInt32(b1) << 8) | (UInt32(b2) << 16) | (UInt32(b3) << 24)
     }
 }
